@@ -35,6 +35,8 @@
 | `D7_API_KEY`, `D7_WEBHOOK_SECRET` | Placeholder for upcoming D7 integration. |
 | `QUEUE_CONNECTION=redis` | Recommended for Horizon. |
 | `HORIZON_PREFIX` | Optional prefix per Clever Cloud app. |
+| `CAMPAIGN_SLICE_DEFAULT_SIZE` | Optional global slice size (emails per run) for campaign throttling. |
+| `CAMPAIGN_SLICE_INTERVAL_MINUTES` | Interval between slices; default 1440 (once per day). |
 
 
 ## Neon Connection Example
@@ -68,6 +70,11 @@ DB_SSLMODE=require
 - Always target the Neon pooled endpoint (`ep-xxx-pooler.region.neon.tech`) so PgBouncer maintains healthy sessions for FrankenPHP workers.
 - Laravel's default retry logic will transparently reconnect on transient "server has gone away" errors when PgBouncer is in the path.
 - `config/database.php` enables `PDO::ATTR_EMULATE_PREPARES` for Postgres, which PgBouncer requires when running in transaction pooling mode.
+
+## Campaign Slicing Tips
+- Enable slicing per campaign from the preview screen, or set `CAMPAIGN_SLICE_DEFAULT_SIZE` to enforce it automatically.
+- Default interval is 1440 minutes (once per day); adjust `CAMPAIGN_SLICE_INTERVAL_MINUTES` to change cadence.
+- Completed slices automatically re-queue the campaign until the full audience is processed.
 
 ## Future D7 Integration
 - D7 webhook endpoint available at `/api/v1/webhooks/d7-network` (returns `202` until implemented).
