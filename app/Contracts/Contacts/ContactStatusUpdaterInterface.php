@@ -15,4 +15,3 @@ interface ContactStatusUpdaterInterface
      */
     public function push(ContactStatusUpdatePayload $payload, array $context = []): void;
 }
-

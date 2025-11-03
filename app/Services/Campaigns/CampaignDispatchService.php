@@ -84,4 +84,3 @@ class CampaignDispatchService extends BaseService
         return false;
     }
 }
-

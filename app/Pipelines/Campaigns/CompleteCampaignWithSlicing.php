@@ -69,4 +69,3 @@ class CompleteCampaignWithSlicing extends CompleteCampaign
         return (int) ($campaign->slice_interval_minutes ?? config('campaign-slices.interval_minutes'));
     }
 }
-

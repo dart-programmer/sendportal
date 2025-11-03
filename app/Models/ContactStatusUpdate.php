@@ -17,4 +17,3 @@ class ContactStatusUpdate extends Model
         'meta' => 'array',
     ];
 }
-

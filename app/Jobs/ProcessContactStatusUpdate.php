@@ -88,4 +88,3 @@ class ProcessContactStatusUpdate implements ShouldQueue
         ]);
     }
 }
-

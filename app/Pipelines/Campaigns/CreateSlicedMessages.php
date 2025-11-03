@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Pipelines\Campaigns;
 
+use Illuminate\Support\Facades\Log;
 use Sendportal\Base\Models\Campaign;
 use Sendportal\Base\Models\Subscriber;
 use Sendportal\Base\Models\Tag;
 use Sendportal\Base\Pipelines\Campaigns\CreateMessages;
-use Illuminate\Support\Facades\Log;
 
 class CreateSlicedMessages extends CreateMessages
 {
@@ -112,4 +112,3 @@ class CreateSlicedMessages extends CreateMessages
         }
     }
 }
-

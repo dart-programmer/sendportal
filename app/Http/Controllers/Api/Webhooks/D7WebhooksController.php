@@ -23,4 +23,3 @@ final class D7WebhooksController extends Controller
         ], 202);
     }
 }
-

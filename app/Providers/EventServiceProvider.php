@@ -7,8 +7,8 @@ namespace App\Providers;
 use App\Listeners\Webhooks\DispatchContactStatusUpdate;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Sendportal\Base\Events\Webhooks\MailjetWebhookReceived;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Sendportal\Base\Events\Webhooks\MailjetWebhookReceived;
 
 class EventServiceProvider extends ServiceProvider
 {

@@ -40,4 +40,3 @@ final class MongoContactRepository
         return null;
     }
 }
-

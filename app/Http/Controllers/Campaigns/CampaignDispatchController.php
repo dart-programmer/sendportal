@@ -107,4 +107,3 @@ class CampaignDispatchController extends BaseController
         ])->save();
     }
 }
-

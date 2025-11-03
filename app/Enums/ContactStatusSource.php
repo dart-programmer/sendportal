@@ -7,6 +7,6 @@ namespace App\Enums;
 enum ContactStatusSource: string
 {
     case Mailjet = 'mailjet';
+
     case D7Network = 'd7_network';
 }
-

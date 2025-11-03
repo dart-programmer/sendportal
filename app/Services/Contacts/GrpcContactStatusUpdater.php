@@ -30,4 +30,3 @@ final class GrpcContactStatusUpdater implements ContactStatusUpdaterInterface
         $this->client->send($payload, $context);
     }
 }
-

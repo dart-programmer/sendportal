@@ -26,4 +26,3 @@ class CampaignDispatchRequest extends BaseRequest
         ]);
     }
 }
-

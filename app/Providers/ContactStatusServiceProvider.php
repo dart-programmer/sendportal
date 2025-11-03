@@ -55,4 +55,3 @@ class ContactStatusServiceProvider extends ServiceProvider
         });
     }
 }
-

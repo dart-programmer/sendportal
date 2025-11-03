@@ -135,4 +135,3 @@ final class DispatchContactStatusUpdate implements ShouldQueue
         ], true);
     }
 }
-

@@ -19,4 +19,3 @@ class CampaignEnhancementsServiceProvider extends ServiceProvider
         $this->app->bind(BaseCampaignDispatchController::class, CampaignDispatchController::class);
     }
 }
-

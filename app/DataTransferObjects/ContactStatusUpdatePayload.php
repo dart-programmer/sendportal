@@ -56,4 +56,3 @@ final class ContactStatusUpdatePayload implements JsonSerializable
         );
     }
 }
-

@@ -68,8 +68,7 @@ class CampaignSlicingTest extends TestCase
 
     private function makeCampaign(array $attributes): Campaign
     {
-        $campaign = new class extends Campaign
-        {
+        $campaign = new class () extends Campaign {
             public function save(array $options = []): bool
             {
                 return true;
@@ -86,4 +85,3 @@ class CampaignSlicingTest extends TestCase
         return $campaign;
     }
 }
-
