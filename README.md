@@ -31,3 +31,6 @@ SendPortal V3 requires:
 - MySQL (≥ 5.7) or PostgreSQL (≥ 9.4)
 
 If you are on an earlier version of PHP (7.3+) or Laravel (8+), please use [SendPortal V2](https://github.com/mettle/sendportal/releases/tag/v2.0.4)
+
+## Custom Deployment Notes
+- FrankenPHP on Clever Cloud guidance, queue configuration, and integration environment variables are documented in `docs/deployment/frankenphp-clever-cloud.md`.
