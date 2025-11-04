@@ -11,7 +11,11 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.4",
         "laravel/ui": "^4.5",
-        "mettle/sendportal-core": "^3.0"
+        "mettle/sendportal-core": "^3.0",
+        "ext-grpc": "*",
+        "ext-mongodb": "*",
+        "grpc/grpc": "^1.59",
+        "mongodb/mongodb": "^1.19"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

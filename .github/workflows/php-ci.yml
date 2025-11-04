@@ -1,0 +1,124 @@
+name: PHP (SendPortal) CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    # Start PostgreSQL as a service container
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: sendportal_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # Health check so we don't start before Postgres is ready
+        options: >-
+          --health-cmd="pg_isready -U postgres -d sendportal_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    strategy:
+      matrix:
+        php-version: ['8.2'] # Adjust if your SendPortal version needs 8.1/8.0
+
+    env:
+      # Laravel DB settings for CI (match the service above)
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: sendportal_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+
+      # Laravel runtime settings for CI
+      APP_ENV: testing
+      APP_DEBUG: false
+      CACHE_DRIVER: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2
+          coverage: none
+          # Add/adjust extensions as needed by your app
+          extensions: mbstring, intl, pdo_pgsql, bcmath, fileinfo, gd
+
+      # Optional: Configure GitHub token (keep commented while repo is public)
+      # - name: Configure Composer GitHub token (for private deps)
+      #   run: composer config -g github-oauth.github.com ${{ secrets.GH_TOKEN }}
+
+      - name: Cache Composer package cache (downloads)
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php-version }}-composer-
+
+      - name: Cache vendor directory
+        id: vendor-cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php${{ matrix.php-version }}-vendor-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php-version }}-vendor-
+
+      - name: Install dependencies (only on cache miss)
+        if: steps.vendor-cache.outputs.cache-hit != 'true'
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction
+          composer dump-autoload -o
+
+      - name: Ensure autoloader optimized (even if vendor was restored)
+        if: steps.vendor-cache.outputs.cache-hit == 'true'
+        run: composer dump-autoload -o
+
+      # Install psql client so we can wait for Postgres cleanly
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h 127.0.0.1 -p 5432 -U postgres; then
+              echo "PostgreSQL is ready"; exit 0;
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 2
+          done
+          echo "PostgreSQL failed to start in time" >&2
+          exit 1
+
+      - name: Prepare application (.env + key)
+        run: |
+          if [ -f .env.example ]; then cp .env.example .env; fi
+          php artisan key:generate --no-interaction
+        # If your app requires extra env vars (e.g., Mailer, Queue), add them to the env: block or echo into .env here.
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      # If SendPortal has seeders or requires baseline data for tests, enable this:
+      # - name: Seed database (optional)
+      #   run: php artisan db:seed --force
+
+      - name: Run tests
+        run: vendor/bin/phpunit --colors=never

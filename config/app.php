@@ -174,6 +174,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
+        App\Providers\ContactStatusServiceProvider::class,
+        App\Providers\CampaignEnhancementsServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],
